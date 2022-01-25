@@ -1,6 +1,6 @@
-import { protoArgument } from './protoArgument';
-import { defineReactive } from './utils';
-import Dep from './dep';
+import { protoArgument } from '../protoArgument';
+import { defineReactive } from '../../utils/utils';
+import Dep from '../vdom/dep';
 /**
  * 响应式设置
  * @param { any } value 

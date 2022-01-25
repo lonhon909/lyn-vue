@@ -1,13 +1,10 @@
 import { proxy } from './utils';
-import { observe } from './observer';
-import { mount } from './compiler2';
-import { mixinRender } from './compiler2/mountComponent';
-import renderHelper from './compiler2/renderHelper';
-import patch from './compiler2/patch';
-import Watcher from './watcher';
+import { observe } from './core/observer/observer';
+import { mount } from './compiler';
+import renderHelper from './compiler/renderHelper';
+import patch from './compiler/patch';
 
 function Vue(options) {
-    debugger
     this._init(options);
 }
 
@@ -26,7 +23,24 @@ Vue.prototype._init = function(options) {
     }
 }
 
-mixinRender(Vue);
+Vue.prototype._render = function() {
+    return this.$options.render.call(this);
+}
+
+Vue.prototype._update = function(vnode) {
+    // 获取旧的 VNode
+    const prevVNode = this._vnode;
+    // 更新实例上的 VNode
+    this._vnode = vnode;
+
+    if (!prevVNode) {
+        // 旧的 VNode 不存在，说明首次渲染
+        this.$el = this.__patch__(this.$el, vnode);
+    } else {
+        // 后续更新走这里
+        this.$el = this.__patch__(prevVNode, vnode);
+    }
+}
 
 Vue.prototype.$mount = function () {
     mount(this);
@@ -48,10 +62,6 @@ function initData(vm) {
 
     // 设置响应式
     observe(vm._data);
-
-    new Watcher(function() {
-        console.log('更新啦');
-    });
 }
 
 

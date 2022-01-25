@@ -1,24 +1,5 @@
-import Dep from './dep';
-import { observe } from './observer';
-
-/**
- * 将 sourceKey 属性代理到 target 上
- * @param { Vue } vm
- * @param { Object }
- * @param { String } key 属性名
- */
-export function proxy(target, sourceKey, key) {
-    Object.defineProperty(target, key, {
-        get() {
-            // 读取 vm.xx 实际上返回的是 vm[sourceKey].xx
-            return target[sourceKey][key];
-        },
-        set(value) {
-            // vm.xx = value 实际上是对 target[sourceKey][key] 赋值
-            target[sourceKey][key] = value;
-        }
-    })
-}
+import Dep from '../core/vdom/dep';
+import { observe } from '../core/observer/observer';
 
 /**
  * 通过 Object.defineProperty 设置 getter setter 拦截
@@ -34,7 +15,6 @@ export function defineReactive(obj, key, value) {
     Object.defineProperty(obj, key, {
         get() {
             if (Dep.target) {
-                console.log(dep)
                 dep.depend();
                 if (childOb) {
                     childOb.dep.depend();

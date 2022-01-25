@@ -1,5 +1,5 @@
 import Vue from "../vue";
-import { isReserveTag } from '../src/utils';
+import { isReserveTag } from '../utils';
 /**
  * 
  * @param { Element|VNode } oldVnode 旧的 VNode 或者真实元素

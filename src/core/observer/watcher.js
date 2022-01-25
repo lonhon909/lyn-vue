@@ -1,4 +1,4 @@
-import Dep from './dep';
+import Dep from '../vdom/dep';
 
 export default class Watcher {
     constructor(cb) {
